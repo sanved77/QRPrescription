@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">QR Prescription</string>
+    <string name="scan_code">&#xf029;</string>
+    <string name="prescripton">&#xf019;</string>
+    <string name="about">&#xf2bb;</string>
+</resources>
