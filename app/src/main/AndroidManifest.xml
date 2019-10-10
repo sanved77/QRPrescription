@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".QRScanner"></activity>
         <activity android:name=".CheckPres"></activity>
+        <activity android:name=".Settings"></activity>
         <receiver android:name=".BootRec"
             android:enabled="false">
             <intent-filter>

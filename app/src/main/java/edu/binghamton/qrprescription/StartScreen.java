@@ -29,10 +29,11 @@ import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 public class StartScreen extends AppCompatActivity {
 
-    CardView scan;
-    CardView check;
+    CardView scan, check, settings;
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
+    SharedPreferences prefs;
+    SharedPreferences.Editor ed;
     SQLiteHelper db;
 
     @Override
@@ -40,12 +41,23 @@ public class StartScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_screen);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        ed = prefs.edit();
+
         setAlarm();
 
-        createNotificationChannel();
+        if(prefs.getBoolean("firstUse", true)){
+            ed.putBoolean("firstUse", false);
+            ed.commit();
+            createNotificationChannel();
+            setTimeConfigs();
+        }
+
 
         scan = findViewById(R.id.bScan);
         check = findViewById(R.id.bCheck);
+        settings = findViewById(R.id.bSettings);
+
         db = new SQLiteHelper(this);
 
         scan.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +75,14 @@ public class StartScreen extends AppCompatActivity {
                 startActivityForResult(i, 200);
             }
         });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(StartScreen.this, Settings.class);
+                startActivityForResult(i, 250);
+            }
+        });
     }
 
     private void setAlarm(){
@@ -75,6 +95,17 @@ public class StartScreen extends AppCompatActivity {
         alarmIntent = PendingIntent.getBroadcast(this, 0, intent, FLAG_UPDATE_CURRENT);
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
+
+    private void setTimeConfigs(){
+        ed.putInt("morningHour",8);
+        ed.putInt("morningMinute", 0);
+        ed.putInt("afternoonHour",13);
+        ed.putInt("afternoonMinute", 0);
+        ed.putInt("nightHour",19);
+        ed.putInt("nightMinute", 0);
+        ed.commit();
+
     }
 
     @Override
