@@ -3,6 +3,7 @@
     package="edu.binghamton.qrprescription">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -20,6 +21,12 @@
         </activity>
         <activity android:name=".QRScanner"></activity>
         <activity android:name=".CheckPres"></activity>
+        <receiver android:name=".BootRec"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
